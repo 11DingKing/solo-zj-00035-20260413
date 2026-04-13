@@ -1,6 +1,6 @@
 package com.jmoreno_dev.productmanager.controller;
 
-import com.jmoreno_dev.productmanager.entity.Product;
+import com.jmoreno_dev.productmanager.dto.ProductDTO;
 import com.jmoreno_dev.productmanager.exceptions.InvalidProductException;
 import com.jmoreno_dev.productmanager.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,30 +19,35 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+    public ResponseEntity<List<ProductDTO>> getAllProducts(
+            @RequestParam(required = false) Long categoryId) {
+        List<ProductDTO> products;
+        if (categoryId != null) {
+            products = productService.getProductsByCategory(categoryId);
+        } else {
+            products = productService.getAllProducts();
+        }
+        return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
-        Product p = productService.getProductById(id);
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
+        ProductDTO p = productService.getProductById(id);
         if (p == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(p);
     }
 
     @PostMapping
-    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product) throws InvalidProductException {
-        Product created = productService.saveOrUpdateProduct(product);
+    public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO productDTO) throws InvalidProductException {
+        ProductDTO created = productService.saveOrUpdateProduct(productDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @Valid @RequestBody Product product) throws InvalidProductException {
-        Product existing = productService.getProductById(id);
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductDTO productDTO) throws InvalidProductException {
+        ProductDTO existing = productService.getProductById(id);
         if (existing == null) return ResponseEntity.notFound().build();
-        // preserve id and save
-        product.setId(id);
-        Product updated = productService.saveOrUpdateProduct(product);
+        ProductDTO updated = productService.updateProduct(id, productDTO);
         return ResponseEntity.ok(updated);
     }
 

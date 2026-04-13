@@ -21,7 +21,7 @@ public class ProductServiceTest {
 
     @Test
     void testSaveProduct() throws InvalidProductException {
-        Product validProduct = new Product(null, "Laptop", "High-end gaming laptop", 1500.00, 9);
+        Product validProduct = new Product(null, "Laptop", "High-end gaming laptop", 1500.00, 9, null);
         Product savedProduct = productService.saveOrUpdateProduct(validProduct);
         assertNotNull (savedProduct.getId(), "Saved product should have an ID");
 
@@ -31,7 +31,7 @@ public class ProductServiceTest {
 
     @Test
     void testSaveInvalidProduct() {
-        Product invalidProduct = new Product(null, null, "No name product", 100.00, 5);
+        Product invalidProduct = new Product(null, null, "No name product", 100.00, 5, null);
         assertThrows(Exception.class, () ->
                 productService.saveOrUpdateProduct(invalidProduct), "Saving a product without a name should throw an exception");
     }

@@ -34,7 +34,7 @@
               type="text"
               class="form-input"
               [value]="categoryFormData().name"
-              (change)="categoryFormData.set({...categoryFormData(), name: catNameInput.value})"
+              (change)="updateCategoryFormName(catNameInput.value)"
               placeholder="Enter category name"
               required
             />
@@ -45,7 +45,7 @@
               #parentSelect
               id="parentCategory"
               class="form-input"
-              (change)="categoryFormData.set({...categoryFormData(), parentId: parentSelect.value ? +parentSelect.value : undefined})"
+              (change)="updateCategoryFormParentId(parentSelect.value)"
             >
               <option value="">-- No Parent (Root Category) --</option>
               @for (cat of getParentCategories(); track cat.id) {
@@ -241,9 +241,7 @@
               #catSelect
               id="category"
               class="form-input"
-              (change)="
-                updateFormData('categoryId', catSelect.value ? +catSelect.value : undefined)
-              "
+              (change)="updateFormDataCategoryId(catSelect.value)"
             >
               <option value="">-- No Category --</option>
               @for (cat of categories(); track cat.id) {

@@ -209,6 +209,14 @@ export class ProductListComponent implements OnInit {
     });
   }
 
+  updateFormDataCategoryId(value: string) {
+    const current = this.formData();
+    this.formData.set({
+      ...current,
+      categoryId: value ? +value : undefined,
+    });
+  }
+
   toggleCategoryManagement() {
     this.showCategoryManagement.set(!this.showCategoryManagement());
     if (this.showCategoryManagement()) {
@@ -298,5 +306,21 @@ export class ProductListComponent implements OnInit {
 
   isChildCategory(category: Category): boolean {
     return !!category.parentId;
+  }
+
+  updateCategoryFormName(name: string) {
+    const current = this.categoryFormData();
+    this.categoryFormData.set({
+      ...current,
+      name: name,
+    });
+  }
+
+  updateCategoryFormParentId(value: string) {
+    const current = this.categoryFormData();
+    this.categoryFormData.set({
+      ...current,
+      parentId: value ? +value : undefined,
+    });
   }
 }
